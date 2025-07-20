@@ -1,57 +1,46 @@
 {{/*
-    file-tree.html – Collapsible sidebar file tree
-    Place this file in:
-    layouts/partials/file-tree.html  (or themes/<your-theme>/layouts/partials/)
+    file-tree.html – collapsible tree showing only content under /posts/
+    Place in layouts/partials/file-tree.html or themes/<theme>/...
   */}}
   
   {{- $current := .Page -}}
-  <nav class="file-tree" aria-label="Site navigation">
-    <ul class="tree-root">
-    {{/* Iterate through top‑level sections (e.g., "Linux", "OS" …) */}}
-    {{- range sort site.Sections "Weight" "Title" }}
-      {{- $section := . }}
-      <li class="tree-node">
-        <details {{ if or (eq $current.Section $section.Section) (in $current.RelPermalink $section.RelPermalink) }}open{{ end }}>
-          <summary>
-            <a class="tree-label" href="{{ $section.RelPermalink }}">
-              {{ $section.Title }}
+  {{- $posts := site.GetPage "section" "posts" -}}
+  {{- if $posts -}}
+  <nav class="file-tree" aria-label="Posts navigation">
+    <details class="tree-node-root" {{ if or (eq $current.Section "posts") (strings.HasPrefix $current.RelPermalink "/posts/") }}open{{ end }}>
+      <summary class="tree-label-root">Posts</summary>
+      <ul class="tree-children">
+        {{/* list direct pages under /posts/ (weight → title) */}}
+        {{- range sort $posts.Pages "Weight" "Title" }}
+          {{- if not .IsSection }}
+          <li class="tree-leaf">
+            <a href="{{ .RelPermalink }}" {{ if eq $current.RelPermalink .RelPermalink }}class="active"{{ end }}>
+              {{ .Title }}
             </a>
-          </summary>
-  
-          <ul class="tree-children">
-          {{/* In‑section pages */}}
-          {{- range sort $section.Pages "Weight" "Title" }}
-            <li class="tree-leaf">
-              <a href="{{ .RelPermalink }}" {{ if eq $current.RelPermalink .RelPermalink }}class="active"{{ end }}>
-                {{ .Title }}
-              </a>
-            </li>
+          </li>
           {{- end }}
-          </ul>
-        </details>
-      </li>
-    {{- end }}
-    </ul>
+        {{- end }}
+  
+        {{/* recursively list sub‑sections inside /posts/ */}}
+        {{- range sort $posts.Sections "Weight" "Title" }}
+          {{ partial "file-tree/section" (dict "Section" . "Current" $current) }}
+        {{- end }}
+      </ul>
+    </details>
   </nav>
+  {{- end }}
   
-  {{/* Optional inline styles – move to assets/scss if preferred */}}
+  {{/* --- styles (move to scss if preferred) --- */}}
   <style>
-  .file-tree {
-    font-family: var(--font-body, sans-serif);
-    line-height: 1.4;
-  }
-  .tree-root, .tree-children { list-style: none; margin: 0; padding: 0; }
-  .tree-node { margin: 0.25rem 0; }
-  .tree-label { text-decoration: none; color: var(--c-link, #444); font-weight: 600; }
-  .tree-leaf a { display: block; padding-left: 1.25rem; color: var(--c-text, #555); text-decoration: none; }
-  .tree-leaf a.active { font-weight: 700; color: var(--c-link-active, #222); }
+  .file-tree { font-family: var(--font-body, sans-serif); line-height: 1.4; }
+  .tree-label-root { font-weight:700; cursor:pointer; }
+  .tree-children, .tree-node-root { list-style:none; margin:0; padding:0; }
+  .tree-leaf a { display:block; padding-left:1.25rem; color:var(--c-text,#555); text-decoration:none; }
+  .tree-leaf a.active { font-weight:700; color:var(--c-link-active,#222); }
   
-  /* reset default <details> arrow & add custom */
-  .tree-node > details > summary { list-style: none; cursor: pointer; }
-  .tree-node > details > summary::-webkit-details-marker { display:none; }
-  .tree-node > details > summary:before {
-    content: "›"; /* right chevron */
-    display: inline-block; width: 1rem; transition: transform .2s ease; }
-  .tree-node > details[open] > summary:before { transform: rotate(90deg); }
+  .tree-node-root > summary { list-style:none; cursor:pointer; }
+  .tree-node-root > summary::-webkit-details-marker { display:none; }
+  .tree-node-root[open] > summary:before { transform:rotate(90deg); }
+  .tree-node-root > summary:before { content:"›"; display:inline-block; width:1rem; transition:transform .2s ease; }
   </style>
   
