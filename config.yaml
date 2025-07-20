@@ -107,11 +107,11 @@ params:
             lang:
 
         gitalk:
-            owner:
-            admin:
-            repo:
-            clientID:
-            clientSecret:
+            owner: WuTa0209
+            admin: WuTa0209
+            repo: WuTa0209.github.io
+            clientID: Ov23lij78DRsoaL8R1yu
+            clientSecret: 5ab179141bce2450541712ea80b407edfbbd3efb
 
         cusdis:
             host:
