@@ -60,7 +60,7 @@ search:
         other: 搜尋
 
     placeholder:
-        other: 輸入關鍵字...
+        other: 請輸入關鍵字...
 
     resultTitle:
         other: "#PAGES_COUNT 個結果 （用時 #TIME_SECONDS 秒）"
