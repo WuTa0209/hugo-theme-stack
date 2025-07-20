@@ -1,0 +1,25 @@
+<div class="widget file-tree">
+    <h2 class="widget-title section-title">分類檔案樹</h2>
+    
+    <div class="widget-body">
+        {{ range .Site.Taxonomies.categories }}
+            <details class="category-folder">
+                <summary class="category-name">
+                    <span class="folder-icon">📁</span>
+                    {{ .Page.Title }} ({{ len .Pages }})
+                </summary>
+                <ul class="post-list">
+                    {{ range .Pages }}
+                        <li class="post-item">
+                            <a href="{{ .RelPermalink }}" class="post-link">
+                                <span class="file-icon">📄</span>
+                                {{ .Title }}
+                            </a>
+                            <span class="post-date">{{ .Date.Format "2006-01-02" }}</span>
+                        </li>
+                    {{ end }}
+                </ul>
+            </details>
+        {{ end }}
+    </div>
+</div>
