@@ -11,7 +11,7 @@
     <div class="widget-icon">
         {{ partial "helper/icon" "archives" }}
     </div>
-    <h2 class="widget-title section-title">{{ T "widget.file-tree.title" }}</h2>
+    <h2 class="widget-title section-title">{{ T "widget.fileTree.title" }}</h2>
     <ul class="tree-root">
     {{/* iterate categories by count; change to Alphabetical if desired */}}
     {{- range first $limit site.Taxonomies.categories.ByCount }}

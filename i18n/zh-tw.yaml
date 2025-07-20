@@ -54,6 +54,9 @@ widget:
     categoriesCloud:
         title:
             other: 分類
+    fileTree:
+        title:
+            other: 文章列表
 
 search:
     title:
